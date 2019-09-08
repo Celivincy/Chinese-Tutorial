@@ -43,11 +43,11 @@ contentType: 初学者
 
 "热图"这个术语可以指许多不同种类的制图可视化，你可能看到他用于总统选举支持率图，人口密度图，甚至是气象图。
 
-在你网络上可以找到的地图中，最常见的有两种热图：第一种是鼓励用户取探索密集点数据的热图，第二种是连续曲面上离散插值，并且在这些点直接创建平滑渐变的热图。后者比前者用的更少一些，它通常被用于科学出版物或者当一个现象以一种可预测的方式分布在一个区域时。例如，你的城市可能只有很少的几个气象预测站，但是你最喜欢的天气应用程序会显示整个城市区域的平滑温度梯度。对于你的城镇本地天气服务，我们可以合理地假设：如果两个相邻的报告了不同的温度，那么他们之间的温度将会平滑地从一个站点变化到下一个站点。
+在你网络上可以找到的地图中，最常见的有两种热图：第一种是鼓励用户取探索密集点数据的热图，第二种是连续曲面上离散插值，并且在这些点直接创建平滑渐变的热图。后者比前者用的更少一些，它通常被用于科学出版物或者当一个现象以一种可预测的方式分布在一个区域时。例如，你的城市可能只有很少的几个气象预测站，但是你最喜欢的天气应用程序会显示整个城市区域的平滑温度梯度。对于你的城镇本地天气服务，我们可以合理地假设：如果两个相邻的气象站点报告了不同的温度，那么他们之间的温度将会平滑地从一个站点变化到下一个站点。
 
 这篇教程的目的在于, 我们指出一种不同类型的可视化，它能更好地展示区域上点的密集度。这种类型的热图并不是通过以[choropleth](/help/tutorials/choropleth-studio-gl-pt-1/)映射的方式来聚合一组边界内的特征点来显示密度, 而是在两个点之间连续地渐变来展示密度。 
 
-热图不仅用于可视化地展示密度，它还有助于可视化地展示这些点之间的差异。你可以根据每个点在数据集中的特征值来为每个点分配更高或者更低的权重。在这篇教程中，你将会你数据集中的`DBH`属性进行加权. `DBH` 代表 "胸部直径" 并且这是在离地4.5英尺测量树木直径的标准方法。通常而言，可以安全地假设拥有更高DBH的树更加年老且体积更大。当你给这些比较大的树一些相比较小树苗更高的权重时，你的可视化可以是区域森林覆盖率的有效近似。 
+热图不仅用于可视化地展示密度，它还有助于可视化地展示这些点之间的差异。你可以根据每个点在数据集中的特征值来为每个点分配更高或者更低的权重。在这篇教程中，你将会你数据集中的`DBH`属性进行加权. `DBH` 代表 "胸部直径" ，并且这是在离地4.5英尺测量树木直径的标准方法。通常而言，可以安全地假设拥有更高DBH的树更加年老且体积更大。当你给这些比较大的树一些相比较小树苗更高的权重时，你的可视化可以是区域森林覆盖率的有效近似。 
 
 ## 热图绘制属性
 <!-- copyeditor ignore represents -->
@@ -60,9 +60,9 @@ contentType: 初学者
 
 ## 使用 Mapbox GL JS 创建你的地图
 
-Now that you understand the purpose of heatmaps and the paint properties you will be working with, it's time to set up your map. For this example, you will be using the Mapbox Dark [template style](https://www.mapbox.com/studio-manual/reference/styles/#mapbox-template-styles). You can find the [Style URLs](/help/glossary/style-url) for each of the template styles in [our API documentation](https://docs.mapbox.com/api/maps/#styles).
+现在你理解了热图的目的和你可能用到的绘制属性，是时候来建立你的地图了。在这个示例中，你将会使用 Mapbox Dark 主题 [template style](https://www.mapbox.com/studio-manual/reference/styles/#mapbox-template-styles)。 你可以在 [our API documentation](https://docs.mapbox.com/api/maps/#styles)中找到每种模板样式的 [Style URLs](/help/glossary/style-url)。
 
-In your text editor, create a new `index.html` file, then copy and paste the below code into it. Make sure to replace `{{ <UserAccessToken /> }}` with an [access token](/help/glossary/access-token/) that is associated with your account. Once you add this code and save your `index.html` file, you can preview the file in your browser to make sure you see the map.
+在你的文本编辑器中，创建一个新的 `index.html` 文件，接下来复制并粘贴下面的代码，确保你把 `{{ <UserAccessToken /> }}`替换为你个人账号中的 [access token](/help/glossary/access-token/)。一旦你把代码添加完毕并保存到 `index.html` 文件中，你就可以在浏览器中浏览并确保你可以正确查看到你的地图。
 
 {{
   <Note imageComponent={<BookImage />}>
