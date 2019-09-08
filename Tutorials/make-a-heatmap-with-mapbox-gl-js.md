@@ -21,7 +21,7 @@ prependJs:
 contentType: 初学者
 ---
 
-在这篇教程中, 你会学到如何使用[Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/api/) 来制作一张热图。 热图用于以视觉上吸引人的方式地展示海量的数据信息，并且鼓励您的用户积极探索您所开发的地图。
+在这篇教程中, 你会学到如何使用[Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/api/) 来制作一张热图。 热图用于以视觉上吸引人的方式地展示海量的数据信息，并且鼓励你的用户积极探索你所开发的地图。
 
 {{
   <DemoIframe src="/help/demos/heatmap/index.html" />
@@ -62,11 +62,11 @@ contentType: 初学者
 
 现在你理解了热图的目的和你可能用到的绘制属性，是时候来建立你的地图了。在这个示例中，你将会使用 Mapbox Dark 主题 [template style](https://www.mapbox.com/studio-manual/reference/styles/#mapbox-template-styles)。 你可以在 [our API documentation](https://docs.mapbox.com/api/maps/#styles)中找到每种模板样式的 [Style URLs](/help/glossary/style-url)。
 
-在你的文本编辑器中，创建一个新的 `index.html` 文件，接下来复制并粘贴下面的代码，确保你把 `{{ <UserAccessToken /> }}`替换为你个人账号中的 [access token](/help/glossary/access-token/)。一旦你把代码添加完毕并保存到 `index.html` 文件中，你就可以在浏览器中浏览并确保你可以正确查看到你的地图。
+在你的文本编辑器中，创建一个新的 `index.html` 文件，接下来复制并粘贴下面的代码，确保你把 `{{ <UserAccessToken /> }}`替换为你个人账号中的 [access token](/help/glossary/access-token/)。把代码添加完毕并保存到 `index.html` 文件中之后，你就可以在浏览器中浏览并确保你可以正确查看到你的地图。
 
 {{
   <Note imageComponent={<BookImage />}>
-    <p>Be sure to save and store the GeoJSON file in the same directory as your project. You will also need to run this application from a local web server, otherwise you will receive a <a href='http://en.wikipedia.org/wiki/Cross-origin_resource_sharing'>Cross-origin Resource Sharing (CORS)</a> error. <a href='http://www.2ality.com/2014/06/simple-http-server.html'>Python's SimpleHTTPServer</a> is included on many computers and is a good choice if this is your first time running a local server.</p>
+    <p>请务必把 GeoJSON 文件保存并放到和你项目相同的目录中，你需要在本地服务器运行这个应用，否则你会收到 <a href='http://en.wikipedia.org/wiki/Cross-origin_resource_sharing'>跨资源共享(CORS)</a> 的错误提示。 <a href='http://www.2ality.com/2014/06/simple-http-server.html'>Python的SimpleHTTPServer</a> 在许多计算机中都已经包含，并且如果这是你第一次运行本地服务器，这将是一个很好的选择。</p>
   </Note>
 }}
 
@@ -111,10 +111,9 @@ contentType: 初学者
 </html>
 
 ```
-### Add your data
+### 添加你的数据
 
-You will first need to add the GeoJSON you downloaded at the beginning of this guide as the source for your heatmap. You can do this by using the [`addSource`](https://www.mapbox.com/mapbox-gl-js/api/#map#addsource) method. This source will be used to create not only a heatmap layer but also a circle layer. The heatmap layer will fade out while the circle layer fades in to show individual data points at higher zoom levels. Add the following code after the map you initialized in the previous step.
-
+你需要首先把本教程开头要求下载的 GeoJSON 文件添加为热图的来源。 你可以通过使用 [`addSource`](https://www.mapbox.com/mapbox-gl-js/api/#map#addsource) 方法来实现这个操作。这个来源文件不仅仅用于制作热图图层，还可以制作圆图层。热图图层将会在圆图层淡入的时候淡出，以便在更高缩放级别显示各个数据点。在你完成前一步的初始化操作后，添加以下代码。
 ```js
 map.on('load', function() {
 
@@ -127,13 +126,13 @@ map.on('load', function() {
 });
 ```
 
-### Add the heatmap layer
+### 添加热图图层
 
-Next, use the [`addLayer`](https://www.mapbox.com/mapbox-gl-js/api/#map#addlayer) method to create a new layer for your heatmap. Once you've created this layer, you will make use of the heatmap properties discussed earlier to fine-tune your heatmap's appearance.
+下一步，使用 [`addLayer`](https://www.mapbox.com/mapbox-gl-js/api/#map#addlayer) 方法来为你的热图创建一个新的图层。创建完图层之后，你将利用前面所提到的热图属性来微调热图的外观。
 
-For `heatmap-weight`, specify a range that reflects your data (the `dbh` property ranges from 1-62 in the GeoJSON source). Because larger trees have a high `dbh`, give them more weight in your heatmap by creating a stop function that increases `heatmap-weight` as `dbh` increases.
+对于 `heatmap-weight`，指定一个反映你数据的范围 (`dbh` 属性的范围是 GeoJSON源中的 1-62)。因为较大的树有较高的 `dbh`，所以通过创建一个暂停函数来给这些树一些更加高的权重，当 `dbh` 增加时，`heatmap-weight`也会增加。
 
-Since `heatmap-intensity` is a multiplier on top of `heatmap-weight`, `heatmap-intensity` can be increased as the map zooms in to preserve a similar appearance throughout the zoom range. The images below show the impact of `heatmap-intensity` on your map's appearance. The image on the left shows `heatmap-intensity` that increases with zoom level and the one on the right shows `heatmap-intensity` that uses the default of `1`.
+因为 `heatmap-intensity` 是 `heatmap-weight`之上的乘数，`heatmap-intensity` 可以随着地图缩放等级而增大，以在整个变焦范围内保持类似的外观。下面的图片显示了 `heatmap-intensity` 对你的地图外观影响，左边的图展示了`heatmap-intensity`随缩放等级而增大的地图外观，而右边图片显示了`heatmap-intensity`使用默认值 `1`时的地图外观.
 
 {{
 <div className='grid'>
@@ -142,9 +141,9 @@ Since `heatmap-intensity` is a multiplier on top of `heatmap-weight`, `heatmap-i
 </div>
 }}
 
-For `heatmap-color`, add an [interpolate](https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-interpolate) expression that defines a linear relationship between heatmap-density and heatmap-color using a set of input-output pairs. If you are interested in learning more about Mapbox GL JS Expressions, read the [Get Started with Mapbox GL JS expressions guide](/help/tutorials/mapbox-gl-js-expressions) and the [Mapbox GL JS documentation](https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions).
+对于 `heatmap-color`，添加一个 [interpolate](https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-interpolate) 表达式，用一组输入-输出的集合来定义一个热图密度和热图颜色之间的线性关系。如果你对学习更多的Mapbox GL JS 表达式有兴趣，阅读以下两个文档：[Get Started with Mapbox GL JS expressions guide](/help/tutorials/mapbox-gl-js-expressions) 和 [Mapbox GL JS documentation](https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions)。
 
-Finish configuring your heatmap layer by setting values for `heatmap-radius` and `heatmap-opacity`. `heatmap-radius` should increase with zoom level to preserve the smoothness of the heatmap as the points become more dispersed. `heatmap-opacity` should be decreased from `1` to `0`  between zoom levels 14 and 15 to provide a smooth transition as your circle layer fades in to replace the heatmap layer. Add the following code within the 'load' event handler after the `addSource` method.
+通过设置`heatmap-radius` 和`heatmap-opacity`的值来完成热图图层的配置。`heatmap-radius` 应该随着缩放等级的增高而增大，以保持热图的平滑度，因为点变得更加分散。`heatmap-opacity` 应该在缩放级别介于14和15之间时，刚好平滑地从 `1` 减少到 `0`，因为你的圆图层在这时淡入并代替热图图层。在`addSource` 方法之后的load事件中添加以下代码。
 
 ```js
 map.addLayer({
