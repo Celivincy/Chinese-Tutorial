@@ -198,10 +198,10 @@ map.addLayer({
 }, 'waterway-label');
 ```
 
-### Add the circle layer
-Next, add a circle layer. As you zoom in to your heatmap, the points stop overlapping visually and it is no longer necessary to show their distribution and density. At this point, you can show the points themselves and allow viewers to explore the data interactively.
+### 添加圆图层
+下一步，添加一个圆图层。当你放大你的热图时，这些点在视觉上会停止重叠，并不再需要显示它们的分布和密度。此时，你可以把点本身显示出来并且允许查看者以交互的方式浏览数据。
 
-Remember how you used a stop function in the previous step to fade the heatmap layer out between zoom level 14 and 15? You'll need to replace that layer by fading your circle layer in, using a zoom function to increase its `circle-opacity` between zooms 14 and 15. For `circle-radius`, use a zoom-and-property function to increase the radius by zoom level and property (as demonstrated below). Add the following code after the heatmap layer you added in the last step.
+记住你在上一步是如何在缩放等级介于14到15之间时把热图图层淡出的吗？你需要把图层替换为圆图层，通过让圆图层淡入来实现，使用一个缩放函数function来增加缩放等级14和15之间圆图层的不透明度 `circle-opacity`。对于圆图层半径 `circle-radius`，使用一个缩放和属性的函数function来增加缩放级别和属性半径(如下所示)。添加以下代码到上一步热图层之后。
 
 ```js
 map.addLayer({
@@ -246,8 +246,8 @@ map.addLayer({
 }, 'waterway-label');
 ```
 
-## Add some additional interactivity
-The following code adds interactivity to your map by allowing your viewers to click on your circle layer to view a popup containing the tree's `DBH` value. Include the code below after your circle layer.
+## 添加一些额外的交互
+以下的代码通过允许观看者点击你的圆图层来查看包含树木`DBH`值的弹出窗口，从而为你的地图添加了交互性，圆图层代码之后添加以下代码即可实现。
 
 {{<img src='/help/img/gl-js/heatmap-popup.gif' alt='demonstrates how to add a popup to the circle layer of a heatmap' className="w-full" />}}
 
@@ -261,9 +261,9 @@ map.on('click', 'trees-point', function(e) {
 
 ```
 
-## Finished product
+## 完成你的作品
 
-Congrats! You made your first heatmap with Mapbox GL JS!
+恭喜! 你已经使用我们的 Mapbox GL JS制作完成了属于你的第一张热图!♥
 
 {{
   <DemoIframe src="/help/demos/heatmap/index.html" />
