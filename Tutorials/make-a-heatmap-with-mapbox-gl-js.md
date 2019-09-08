@@ -41,25 +41,24 @@ contentType: 初学者
 
 ## 热图的主要目的是什么?
 
-The term "heatmap" can refer to a few different kinds of cartographic visualizations. You may see it applied to presidential election maps, population density maps, or even meteorological maps.
+"热图"这个术语可以指许多不同种类的制图可视化，你可能看到他用于总统选举支持率图，人口密度图，甚至是气象图。
 
-Among maps you'll find on the web, there are two common categories of heatmaps: those that encourage the user to explore dense point data, and those that interpolate discrete values over a continuous surface, creating a smooth gradient between those points. The latter is less common and most often used in scientific publications or when a phenomenon is distributed over an area in a predictable way. For example, your town may only have a few weather stations, but your favorite weather app displays a smooth gradient of temperatures across the entire area of your town. For your local weather service, it is reasonable to assume that, if two adjacent stations report different temperatures, the temperature between them will transition gradually from one to the next.
+在你网络上可以找到的地图中，最常见的有两种热图：第一种是鼓励用户取探索密集点数据的热图，第二种是连续曲面上离散插值，并且在这些点直接创建平滑渐变的热图。后者比前者用的更少一些，它通常被用于科学出版物或者当一个现象以一种可预测的方式分布在一个区域时。例如，你的城市可能只有很少的几个气象预测站，但是你最喜欢的天气应用程序会显示整个城市区域的平滑温度梯度。对于你的城镇本地天气服务，我们可以合理地假设：如果两个相邻的报告了不同的温度，那么他们之间的温度将会平滑地从一个站点变化到下一个站点。
 
-For the purposes of this tutorial, we are referring to a different kind of visualization that is more useful for showing the **density** of points over an area. This type of heatmap does not visualize density by aggregating features within a set of boundaries in the way a [choropleth](/help/tutorials/choropleth-studio-gl-pt-1/) map does, but instead displays a continuous gradient between points.
+这篇教程的目的在于, 我们指出一种不同类型的可视化，它能更好地展示区域上点的密集度。这种类型的热图并不是通过以[choropleth](/help/tutorials/choropleth-studio-gl-pt-1/)映射的方式来聚合一组边界内的特征点来显示密度, 而是在两个点之间连续地渐变来展示密度。 
 
-Heatmaps aren't only useful for visualizing point density. They can also help visualize relative differences between those points. You can assign each point a higher or lower importance based on the value of a particular property within the dataset. In this tutorial, you will weight your map by the `DBH` property in your data. `DBH` stands for "diameter at breast height" and is a standard way of measuring a tree's diameter at 4.5 feet above the ground. In general, it is safe to assume that a tree with a higher `DBH` is older and larger. When you give these larger trees a higher weight compared to smaller saplings, your visualization can be an effective approximation of the area that is shaded by trees' leaves.
+热图不仅用于可视化地展示密度，它还有助于可视化地展示这些点之间的差异。你可以根据每个点在数据集中的特征值来为每个点分配更高或者更低的权重。在这篇教程中，你将会你数据集中的`DBH`属性进行加权. `DBH` 代表 "胸部直径" 并且这是在离地4.5英尺测量树木直径的标准方法。通常而言，可以安全地假设拥有更高DBH的树更加年老且体积更大。当你给这些比较大的树一些相比较小树苗更高的权重时，你的可视化可以是区域森林覆盖率的有效近似。 
 
-## Heatmap paint properties
+## 热图绘制属性
 <!-- copyeditor ignore represents -->
-To add a [heatmap layer](https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-heatmap) to your map, you will need to configure a few properties. Understanding what these properties mean is key to creating a heatmap that accurately represents your data and strikes the right balance between too much detail and being a single, generalized blob.
+添加一个热图图层 [heatmap layer](https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-heatmap) 到你的地图, 你需要配置一些属性。理解这些属性含义是创建出准确表示你的数据地图的关键，并且在太多细节和简单通用之间找到正确的平衡。
+- **heatmap-weight热图权重**: 用于衡量每个点各自为你的热图表现起多大的作用。热图图层的权重默认是1.0，这意味着所有点的权重都是均等的。把 `heatmap-weight` 属性增加到5.0 和把五个点放在同一个位置具有同样的效果。你可以使用一个暂停的功能来为每个点设置基于指定属性的权重。
+- **heatmap-intensity热图强度**: 一个在 `heatmap-weight`之上的乘数， 主要用于方便地根据缩放级别来调整热图外观。
+- **heatmap-color热图颜色**: 定义了热图的颜色渐变，从最小值到最大值。颜色取决于每个像素点的热图密度 [heatmap-density](https://www.mapbox.com/mapbox-gl-js/style-spec#expressions-heatmap-density) (范围从`0.0` 到 `1.0`)，这个属性值是 [expression](https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions) 它使用热图密度作为输入。有关热图颜色的选择灵感，请查看 [Color Brewer](http://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3).
+- **heatmap-radius热图半径**: 为每个点设置以像素为单位的半径，半径越大，热图越平滑，而细节也越少。
+- **heatmap-opacity热图不透明度**: 控制热图图层的全局不透明度.
 
-- **heatmap-weight**: Measures how much each individual point contributes to the appearace of your heatmap. Heatmap layers have a weight of one by default, which means that all points are weighted equally. Increasing the `heatmap-weight` property to five has the same effect as placing five points in the same location. You can use a stop function to set the weight of your points based on a specified property.
-- **heatmap-intensity**: A multiplier on top of `heatmap-weight` that is primarily used as a convenient way to adjust the appearance of the heatmap based on zoom level.
-- **heatmap-color**: Defines the heatmap's color gradient, from miniumum value to maximum value. The color displayed is dependent on the [heatmap-density](https://www.mapbox.com/mapbox-gl-js/style-spec#expressions-heatmap-density) value of each pixel (ranging from `0.0` to `1.0`). The value of this property is an [expression](https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions) that uses heatmap-density as the input. For inspiration on color choices for your heatmap, take a look at [Color Brewer](http://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3).
-- **heatmap-radius**: Sets the radius for each point in pixels. The bigger the radius, the smoother the heatmap and the less amount of detail.
-- **heatmap-opacity**: Controls the global opacity of the heatmap layer.
-
-## Create your map using Mapbox GL JS
+## 使用 Mapbox GL JS 创建你的地图
 
 Now that you understand the purpose of heatmaps and the paint properties you will be working with, it's time to set up your map. For this example, you will be using the Mapbox Dark [template style](https://www.mapbox.com/studio-manual/reference/styles/#mapbox-template-styles). You can find the [Style URLs](/help/glossary/style-url) for each of the template styles in [our API documentation](https://docs.mapbox.com/api/maps/#styles).
 
