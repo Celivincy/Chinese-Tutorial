@@ -1,6 +1,6 @@
 ---
-title: Make a heatmap with Mapbox GL JS
-description: Add custom HTML markers, style them, and add tooltips with Mapbox GL JS.
+title: 使用Mapbox GL JS制作一张热图
+description:添加自定义HTML标记，设置样式，并使用Mapbox GL JS添加工具提示.
 thumbnail: makeAHeatmapWithMapboxGlJs
 level: 2
 topics:
@@ -9,37 +9,37 @@ topics:
 - data
 language:
 - JavaScript
-prereq: Familiarity with front-end development concepts.
+prereq: 熟悉前端开发概念.
 prependJs:
-  - "import * as constants from '../../constants';"
-  - "import Note from '@mapbox/dr-ui/note';"
-  - "import BookImage from '@mapbox/dr-ui/book-image';"
-  - "import Icon from '@mapbox/mr-ui/icon';"
-  - "import UserAccessToken from '../../components/user-access-token';"
-  - "import DemoIframe from '@mapbox/dr-ui/demo-iframe';"
-  - "import Button from '@mapbox/mr-ui/button';"
-contentType: tutorial
+  - "从'../../constants'导入常量;"
+  - "从'@mapbox/dr-ui/note'导入注释;"
+  - 从'@mapbox/dr-ui/book-image'导入BookImage;"
+  - "从'@mapbox/mr-ui/icon'导入图标;"
+  - "从'../../components/user-access-token'导入UserAccessToken;"
+  - "从'@ mapbox / dr-ui / demo-iframe'导入DemoIframe;"
+  - "从'@mapbox/mr-ui/button'导入按钮;"
+contentType: 初学者
 ---
 
-In this guide, you will learn how to make a heatmap using [Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/api/). Heatmaps can be used to display large amounts of points in a way that is visually engaging and encourages your audience to explore your map.
+在这篇教程中, 你会学到如何使用[Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/api/) 来制作一张热图。 热图用于以视觉上吸引人的方式地展示海量的数据信息，并且鼓励您的用户积极探索您所开发的地图。
 
 {{
   <DemoIframe src="/help/demos/heatmap/index.html" />
 }}
 
-## Getting started
+## 准备开始
 
-- **A Mapbox account and access token**. Sign up for an account at mapbox.com/signup. You can find your access tokens on your [Account page](https://www.mapbox.com/account).
-- [**Mapbox GL JS**](https://www.mapbox.com/mapbox-gl-js). The Mapbox JavaScript API for building web maps.
-- **Data**. In this tutorial, you’ll be using a GeoJSON file of street trees in the city of Pittsburgh from the [Western Pennsylvania Regional Data Center](http://www.wprdc.org/).
+- **一个 Mapbox 账号以及相应的 access token**. 在 mapbox.com/signup 注册一个账号，你可以在你的账号界面[Account page](https://www.mapbox.com/account)找到你拥有的access tokens。
+- [**Mapbox GL JS**](https://www.mapbox.com/mapbox-gl-js). 包含Mapbox 中用于制作web地图的JavaScript API接口.
+- **Data**. 在这篇教程中, 你将使用一个包含匹斯堡市街道树木信息 [Western Pennsylvania Regional Data Center](http://www.wprdc.org/)的GeoJSON 文件.
 
 {{
 <Button href="/help/demos/heatmap/trees.geojson" passthroughProps={{ download: "trees.geojson" }} >
-    <Icon name='arrow-down' inline={true} /> Download GeoJSON
+    <Icon name='arrow-down' inline={true} /> 下载GeoJSON
 </Button>
 }}
 
-## What is the purpose of a heatmap?
+## 热图的主要目的是什么?
 
 The term "heatmap" can refer to a few different kinds of cartographic visualizations. You may see it applied to presidential election maps, population density maps, or even meteorological maps.
 
