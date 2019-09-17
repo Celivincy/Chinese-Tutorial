@@ -1,49 +1,49 @@
 ---
-title: Sort stores by distance
-description: This guide walks you through all the code that you need to build a store locator which lets you search for the nearest location.
-thumbnail: geocodeAndSort
+title: 根据距离为商店排序
+description: 这篇教程将指导你通过代码去构建一个商店定位工具，它能搜索离你的当前位置最近的商店。
+thumbnail: 地理编码和排序
 level: 3
 language:
 - JavaScript
-prereq: Familiarity with front-end development concepts. Some advanced JavaScript required.
+prereq: 熟悉前端开发的概念，以及一些进阶的JavaScript使用技巧.
 topics:
 - web apps
 - geocoding
 prependJs:
-  - "import Icon from '@mapbox/mr-ui/icon';"
-  - "import DemoIframe from '@mapbox/dr-ui/demo-iframe';"
-  - "import * as constants from '../../constants';"
-  - "import Note from '@mapbox/dr-ui/note';"
-  - "import BookImage from '@mapbox/dr-ui/book-image';"
-contentType: tutorial
+  - "从 '@mapbox/mr-ui/icon'导入图标;"
+  - "从 '@mapbox/dr-ui/demo-iframe'导入DemoIframe;"
+  - "从 '../../constants'导入* 作为常量;"
+  - "从 '@mapbox/dr-ui/note'导入注释;"
+  - "从 '@mapbox/dr-ui/book-image'导入BookImage;"
+contentType: 初学者
 ---
 
-This guide will walk you through how to use [Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/), the [Mapbox GL Geocoder plugin](https://github.com/mapbox/mapbox-gl-geocoder), and [Turf.js](http://turfjs.org/) to sort store locations based on distance from a geocoded point. This guide extends the map created in the [Build a store locator using Mapbox GL JS](/help/tutorials/building-a-store-locator) tutorial. If haven't completed that tutorial yet, be sure to do so before starting this project. If you're new to Mapbox GL JS, you may also want to read our [Web applications guide](/help/how-mapbox-works/web-apps) first.
+这篇教程将指导你如何去使用 [Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/),以及 [Mapbox GL Geocoder plugin](https://github.com/mapbox/mapbox-gl-geocoder)和 [Turf.js](http://turfjs.org/) 来根据离地理编码点的距离从近到远排序周围的商店。这篇教程是在 [Build a store locator using Mapbox GL JS](/help/tutorials/building-a-store-locator) 教程中所创建的地图上进行扩充。如果你还没有完成上一篇教程， 你需要点击链接完成该教程后再来开启本项目。 如果你是初次接触 Mapbox GL JS,，你可能还需要先阅读一下我们的网页app开发指导 [Web applications guide](/help/how-mapbox-works/web-apps)。
 
 {{
   <DemoIframe src="/help/demos/geocode-and-sort/index.html" />
 }}
 
-## Getting started
+## 准备开始
 
-For this project, we recommend that you create a local folder called "sort-store-locator" to house your project files. You'll see this folder referred to as your *project folder*.
+在这个项目中，我们建议你创建一个名为 "sort-store-locator" 的本地文件夹来存放你的项目文件。在下文中，这个文件夹将被称为*项目文件夹*.
 
-There are a few resources you'll need before getting started:
+你需要在开始前准备以下资源：
 
-- __Store locator final project__. This tutorial builds off of the code created in the [Build a store locator using Mapbox GL JS](/help/tutorials/building-a-store-locator) tutorial. Make sure you've created a copy of the final version of that code for this new project or downloaded the starter code. <a href="/help/demos/geocode-and-sort/starter-code.zip">{{<Icon name='arrow-down' inline={true} />}} Download starter code</a>
-- [__An access token__](/help/glossary/access-token/) from your account. You will use an access token to associate a map with your account. Your access token is on the  [Account page](https://account.mapbox.com/).
-- [__Mapbox GL JS__](https://www.mapbox.com/mapbox-gl-js/). The Mapbox JavaScript library that uses WebGL to render interactive maps from Mapbox GL styles.
-- [__Mapbox GL Geocoder__](https://www.mapbox.com/mapbox-gl-js/plugins/) plug-in. The Mapbox GL JS wrapper library for the [Mapbox Geocoding API](https://docs.mapbox.com/api/search/#geocoding).
-- [__Turf.js__](http://turfjs.org). An open-source analysis library that performs spatial analysis in the browser and in Node.js.
-- __A text editor.__ You'll be writing HTML, CSS, and JavaScript.
+- __存储定位工具的最终项目__. 这个初学者教程建立在 [Build a store locator using Mapbox GL JS](/help/tutorials/building-a-store-locator) 教程中的代码上。确保你复制了链接中的最终版本代码到你的项目文件夹中，或者你从这里下载一份 <a href="/help/demos/geocode-and-sort/starter-code.zip">{{<Icon name='arrow-down' inline={true} />}} 下载预备代码</a>
+- [__一个密钥access token__](/help/glossary/access-token/) 来自你的个人账号。你将会使用这个密钥access token来绑定你创建的地图到你的账户。你拥有的所有密钥都在这里 [Account page](https://account.mapbox.com/)。
+- [__Mapbox GL JS__](https://www.mapbox.com/mapbox-gl-js/) Mapbox 的 JavaScript 库使用了 WebGL 来渲染带有 Mapbox GL styles 的可交互地图。
+- [__Mapbox GL Geocoder__](https://www.mapbox.com/mapbox-gl-js/plugins/) 插件。 用于 [Mapbox 地理位置编码的 API](https://docs.mapbox.com/api/search/#geocoding)的Mapbox GL JS 包装器wrapper库。
+- [__Turf.js__](http://turfjs.org)。一个开源的分析库，它可以在浏览器和 Node.js中执行空间分析。
+- __一个文本编辑器.__ 在这里编写 HTML, CSS, 和 JavaScript的代码文件。
 
-## Add plugins and initialize the map
+## 添加插件并初始化地图
 
-Download the `starter-code` zip file. Inside you'll find an `index.html` file and an `img` folder that contains the custom marker you'll be using to show store locations. Open the `index.html` file in a text editor. Make sure you use your own access token and set it equal to `mapboxgl.accessToken`.
+下载 `预备代码` 压缩文件。在里面你可以找到一个名为 `index.html` 的文件以及一个 `img` 文件夹，该文件夹中包含了你用来展示商店位置的自定义marker。在文本编辑器中打开 `index.html` 文件，把文件中的 `mapboxgl.accessToken`替换为你的密钥access token。
 
-### Add Mapbox GL geocoder plugin and Turf.js
+### 添加 Mapbox GL geocoder 插件以及 Turf.js
 
-Next, set up your document by adding the Mapbox GL Geocoder plug-in and Turf.js library links to the `head` of your HTML file. Copy and paste the following code after your links to Mapbox GL JS.
+下一步，在你的HTML文件的`head`添加 Mapbox GL Geocoder 插件和 Turf.js 库的链接来启动你的文档：拷贝并粘贴以下代码在 Mapbox GL JS 的链接之后即可完成。
 
 ```html
   <!-- Geocoder plugin -->
@@ -54,11 +54,11 @@ Next, set up your document by adding the Mapbox GL Geocoder plug-in and Turf.js 
   <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 ```
 
-### Add geocoder control
+### 添加地理编码控件
 
-Add the geocoder control to your JavaScript code using the constructor `new mapboxgl.Geocoder`. In this case, you'll limit the search results to the Washington DC area using the `bbox` parameter. There are several other parameters you can specify. You can read more about the available parameters in the [documentation on GitHub](https://github.com/mapbox/mapbox-gl-geocoder/blob/master/API.md).
+使用 `new mapboxgl.Geocoder`构造器来添加地理编码控件到你的 JavaScript代码中。这样你就可以通过`bbox`参数把搜索结果限制在华盛顿特区。还有许多其他你可以指定的参数。更多关于可用参数的信息可以在 [documentation on GitHub](https://github.com/mapbox/mapbox-gl-geocoder/blob/master/API.md)中阅读并学习。
 
-The code below should be added inside `map.on('load', function (e) { ... });` in your `script` tags.
+在你的 `script` 标签对中，你需要把以下代码添加到方法 `map.on('load', function (e) { ... });` 里。
 
 ```js
 var geocoder = new MapboxGeocoder({
@@ -71,7 +71,7 @@ var geocoder = new MapboxGeocoder({
 map.addControl(geocoder, 'top-left');
 ```
 
-Now add some CSS to style your new geocoding search bar. You can add this code right before your closing `</style>` tag.
+现在添加一些 CSS 样式来装饰你的地理搜索栏。你可以添加以下代码在 `</style>` 关闭标签的左侧.
 
 ```css
 .mapboxgl-ctrl-geocoder {
@@ -89,21 +89,21 @@ Now add some CSS to style your new geocoding search bar. You can add this code r
 }
 ```
 
-Save your HTML document, and refresh the page in your web browser. The result should look like this.
+保存你的 HTML 文档，并且刷新你的网页浏览器，运行效果会和下面展示的一致：
 
 {{
   <DemoIframe src="/help/demos/geocode-and-sort/step-one.html" />
 }}
 
-Notice what happens when you search for an address using the geocoding form you have created. The map will fly to the location you've specified, but doesn't visualize the matching location. In the next step, you'll add a point once you've successfully found a location using Mapbox GL Geocoder.
+注意当你使用你所创建网页搜索地址时会发生什么。地图会跳转到你预先指定的位置上，而并没能正确显示与搜索结果匹配的位置。在下一步中，你需要在 Mapbox GL 地理编码器成功找到一个位置后添加一个新的定位点。
 
-## Add point on search
+##当搜索时添加定位点
 
-{{<Note title="Adding a custom marker style" imageComponent={<BookImage />}>}}
-  The Mapbox GL Geocoder sets a marker at the search result location by default. This example adds a custom marker as a new layer instead. If you want to use the default marker provided by the geocoder, remove the line `marker: false,` from the new geocoder instantiation.
+{{<Note title="添加自定义Maker的样式" imageComponent={<BookImage />}>}}
+  Mapbox GL 地理编码器在搜索到结果后使用默认样式来初始化一个 marker。这个例子中我们把自定义的marker添加为新图层来代替默认样式。当你想要使用默认的marker时，你可以在地理编码器的初始化中移除 `marker: false,` 这一行。
 {{</Note>}}
 
-Now that your geocoder is working, you can write code to add a point to your map at the location you searched. All this code will go inside `map.on('load', function (e) { ... });` directly following the code you added in the previous step. First, you need to add an empty source using `map.addSource()` where you will store your geocoder result, and a styled layer from that source using `map.addLayer()`.
+现在你的地理编码器正在正确运行，你可以写代码来为你搜索到的结果添加一个定位点地图中。所有的代码会添加在 `map.on('load', function (e) { ... });` 里你上一步代码的后面。步骤如下：首先，你需要使用 `map.addSource()` 方法来添加一个空的源到你存储地理编码器结果的地方，接下来你需要通过`map.addLayer()`方法来使用这个源中的样式图层。
 
 ```js
 map.addSource('single-point', {
@@ -127,7 +127,7 @@ map.addLayer({
 });
 ```
 
-Next, create an event listener that fires when the user selects a geocoder result. When the user selects a place from the list of returned locations, save the coordinates in a variable called `searchResult`. Then, set the data in the source with the id `single-point` you declared above to `searchResult`. Copy and paste this code after the `map.addSource()` and `map.addLayer()` functions.
+下一步，创建一个事件监听器来监听用户点击某个地理编码结果的事件。当你的用户点击了返回结果列表中的某一个地理位置后， 将坐标保存在名为`searchResult`的变量中，接着，使用你在上面声明的 id `single-point` 来把源中的数据设置为 `searchResult`：拷贝并粘贴以下代码到 `map.addSource()` 方法 `map.addLayer()` 方法后。
 
 ```js
 geocoder.on('result', function(ev) {
@@ -136,21 +136,21 @@ geocoder.on('result', function(ev) {
 });
 ```
 
-The result should look like this:
+运行效果如下图所示：
 
 {{
   <DemoIframe src="/help/demos/geocode-and-sort/step-two.html" />
 }}
 
-## Sort store list by distance
+## 根据距离为商店列表排序
 
-Next, calculate the distance between the searched location and the stores, add the results to your GeoJSON data, and sort the store listings by distance from the searched point.
+下一步，计算搜索到的位置与商店之间的距离，把结果添加到你的 GeoJSON 数据中，并且根据离搜索点的距离为商店列表排序。
 
-### Find distance from all locations
+### 找到所有位置的距离
 
-Next you'll use Turf.js to find the distances between your new point and each of the restaurant locations. Turf.js can do a wide variety of spatial analysis functions, which you can read about in the [documentation](http://turfjs.org/docs/). In this tutorial you are going to use [**distance**](http://turfjs.org/docs/#distance).
+接下来你将会使用 Turf.js 计算你的搜索点和每个商店位置的距离。Turf.js 可以实现各种各样的空间分析功能，你可以在这个文档中 [documentation](http://turfjs.org/docs/)阅读更详细的信息。在本教程中，你将使用 [**距离distance**](http://turfjs.org/docs/#distance)来进行分析。
 
-Within your `geocoder.on('result', function(){...});` function, use a `forEach` loop to iterate through all the store locations in your GeoJSON (remember, you stored these in the `stores` variable earlier), define a new property for each object called `distance`, and set the value of that property to the distance between the coordinates stored in the `searchResult` and the coordinates of each store location. You will do this using the `turf.distance()` method, which accepts three arguments: `from, to, options`.
+在你的 `geocoder.on('result', function(){...});` 方法中，使用 `forEach` 循环来迭代遍历 GeoJSON 中所有的商店位置（记住，你已经把这些信息存储在了 `stores` 变量中），为每个商店对象定义一个叫 `distance`的新属性，并且把这个属性的值设置为`searchResult`中存储的坐标和该商店的坐标点之间的距离。你可以使用 `turf.distance()`方法来接收三个参数：`from, to, options`并计算距离结果。
 
 ```js
 var options = { units: 'miles' };
