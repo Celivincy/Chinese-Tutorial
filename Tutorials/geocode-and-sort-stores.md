@@ -146,7 +146,7 @@ geocoder.on('result', function(ev) {
 
 下一步，计算搜索到的位置与商店之间的距离，把结果添加到你的 GeoJSON 数据中，并且根据离搜索点的距离为商店列表排序。
 
-### 找到所有位置的距离
+### 找到所有商店和定位点间的距离
 
 接下来你将会使用 Turf.js 计算你的搜索点和每个商店位置的距离。Turf.js 可以实现各种各样的空间分析功能，你可以在这个文档中 [documentation](http://turfjs.org/docs/)阅读更详细的信息。在本教程中，你将使用 [**距离distance**](http://turfjs.org/docs/#distance)来进行分析。
 
@@ -164,9 +164,9 @@ stores.features.forEach(function(store) {
 });
 ```
 
-For each feature in your GeoJSON, a `distance` property is applied or will be updated each time a new geocoder result is selected.
+对于GeoJSON里的每个特征，`distance`属性property is applied or will be updated each time a new geocoder result is selected.
 
-#### Sort store list by distance
+#### 使用距离为商店列表排序
 
 Now that you have the `distance` value for each store location, you can use it to sort the list of stores by distance.
 
@@ -251,9 +251,9 @@ sortLonLat(0);
 createPopUp(stores.features[0]);
 ```
 
-## Finished product
+## 完成本项目
 
-You have created a store locator with geocoding and spatial analysis.
+你已经创建了一个带有地理编码和空间分析的商店定位器。
 
 {{
   <DemoIframe src="/help/demos/geocode-and-sort/index.html" />
