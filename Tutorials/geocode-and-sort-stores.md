@@ -164,13 +164,11 @@ stores.features.forEach(function(store) {
 });
 ```
 
-对于GeoJSON里的每个特征，`distance`属性property is applied or will be updated each time a new geocoder result is selected.
-
+对于GeoJSON里的每个特征，每次选择新的地理编码搜索结果时，都会应用或更新新的`distance`属性值。
 #### 使用距离为商店列表排序
 
-Now that you have the `distance` value for each store location, you can use it to sort the list of stores by distance.
-
-First, sort the objects in the `stores` array by the `distance` property you added earlier. Copy and paste the following code snippet inside the `geocoder.on('result', function(){...});` function.
+现在你拥有了距离每个商店位置的距离`distance`值，你可以根据这些值的大小对商店列表进行排序。
+首先，把你之前添加到 `stores` 数组中的各个商店对象根据 `distance` 属性值的大小来进行排序。拷贝并粘贴以下代码片段到 `geocoder.on('result', function(){...});` 方法中。
 
 ```js
 stores.features.sort(function(a, b) {
@@ -185,7 +183,7 @@ stores.features.sort(function(a, b) {
 });
 ```
 
-Then, remove the current list of stores and rebuild the list using the reordered array you created. The individual listings are nested within the `div` with id `listings`.
+接下来，移除当前的商店列表并且根据刚刚重新排序的数组重新构建列表。这些单个的列表嵌套在`div`中，id 为`listings`。
 
 ```js
 var listings = document.getElementById('listings');
@@ -196,7 +194,7 @@ while (listings.firstChild) {
 buildLocationList(stores);
 ```
 
-Now the listing for each store will be in ascending order of distance from the point that was searched. To make the new list of locations more useful to your viewers, add text that describes each listing's distance from the point they searched for. When you built your initial interactive store locator in the previous tutorial, you created a `buildLocationListing()` function. You will need to find and change that function to check if there is a `distance` property, and if there is, add the value of that property to each listing. Copy and paste the following code before the `link.addEventListener()` function within the `buildLocationListing()` function.
+现在，由各个商店组成的列表将由与搜索点间的距离升序排列。为了使新的位置列表更加直观易用，添加一些描述每个商店到搜索点间距离的文本。在上一个教程中构建初始交互式商店定位器时，你创建了一个名为 `buildLocationListing()` 的方法。你需要找到这个方法并且修改它来确认里面是否已经包含了 `distance` 属性。如果有的话，将该属性的值添加到每个列表中，拷贝并粘贴以下代码到 `link.addEventListener()` 方法中的 `buildLocationListing()` 方法之前。
 
 ```js
 if (prop.distance) {
@@ -205,18 +203,17 @@ if (prop.distance) {
 }
 ```
 
-The result should look like this:
+效果如下所示：
 
 {{
   <DemoIframe src="/help/demos/geocode-and-sort/step-three.html" />
 }}
 
-## Fit bounds to search result and closest store
+## 为搜索结果和最近商店适配边界
 
-Finally, when you search for a location, you can change the view to include both the location that was searched and the closest store to show more context. You can do this by using `map.fitBounds()` and specifying a [bounding box](/help/glossary/bounding-box/). But the bounds need to be in a specific order. The first point you specify should be the lower left corner of the bounding box, and the second should be the upper right corner. Add the following code inside the `geocoder.on()` function to create a `bbox` with this syntax from the geocoded location and the closest store, fly to it, and open the closest store's popup.
+最终，当你搜索一个地址时，你可以更改视图来包含搜索结果和距离最近的商店来显示更多相关内容。你可以通过使用 `map.fitBounds()` 方法和指定一个[bounding box](/help/glossary/bounding-box/)，但是边界需要有指定的优先级顺序。你指定的第一个点应该是边界框的左下角，第二个应该是右上角。添加以下代码到`geocoder.on()` 方法中，从地理编码和距离最近的商店中创建一个带有这个语法的 `bbox` ，跳到这片区域并且打开这个商店的信息弹窗。
 
-```js
-function sortLonLat(storeIdentifier) {
+```jsfunction sortLonLat(storeIdentifier) {
   var lats = [stores.features[storeIdentifier].geometry.coordinates[1], searchResult.coordinates[1]];
   var lons = [stores.features[storeIdentifier].geometry.coordinates[0], searchResult.coordinates[0]];
 
@@ -259,6 +256,6 @@ createPopUp(stores.features[0]);
   <DemoIframe src="/help/demos/geocode-and-sort/index.html" />
 }}
 
-## Next steps
+## 其他扩展
 
-After this guide, you should have everything you need to create your own store locator. You can complete the [Create a custom style tutorial](/help/tutorials/create-a-custom-style/) to create a branded map style or use [Cartogram](https://apps.mapbox.com/cartogram/), a drag and drop tool, to create a custom style from your logo in minutes. To do more with Mapbox GL JS, explore our [examples page](https://www.mapbox.com/mapbox-gl-js/examples/) and the Mapbox GL JS on the [help page](/help/tutorials/).
+完成这个教程以后，你应该已经拥有了自定义定位器所需要的一切。你可以继续完成 [Create a custom style tutorial](/help/tutorials/create-a-custom-style/) 来创建一个品牌地图样式，或者使用 [Cartogram](https://apps.mapbox.com/cartogram/)，这是一个拖放工具，它能花不到几分钟从你的logo创建一个自定义样式。想要了解更多有关 Mapbox GL JS的使用，你可以跳转到[examples page](https://www.mapbox.com/mapbox-gl-js/examples/) 以及[help page](/help/tutorials/)中的Mapbox GL JS分类来查看更多信息。
